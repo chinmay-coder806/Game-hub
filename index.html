@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Game Hub</title>
+    <title>Game Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
-    <h1>Game Hub</h1>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center min-h-screen font-sans">
 
-    <p id="score">
-        Score: 0
-    </p>
+    <div class="bg-gray-800 p-8 rounded-xl shadow-2xl flex flex-col items-center max-w-lg w-full">
+        <h1 class="text-4xl font-bold mb-4 text-green-400 tracking-wider">AI Snake Arena</h1>
+        
+        <p>Score: <span id="scoreValue">0</span></p>
+        <p>High Score: <span id="highScore">0</span></p>
+        
+        <canvas id="gameCanvas" width="400" height="400"
+            class="bg-black border-4 border-grey-700 rounded-lg shadow-inner mb-6"></canvas>
 
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <div class="flex gap-4 w-full">
+            <button id="startBtn"
+                class="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded transition duration-200">
+                Start Game
+            </button>
 
-    <br>
+            <button id="aiBtn"
+                class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-4 rounded transition duration-200">
+                AI Commentary
+            </button>
+        </div>
 
-    <button id="startBtn">
-        Start Game
-    </button>
+        <div id="commentary"
+            class="mt-6 w-full p-4 bg-gray-700 rounded text-center italic text-gray-300 min-h-[60px] flex items-center justify-center">
+            Waiting for game to start... Click "AI Commentary" during the game.
+        </div>
+        <div class="flex justify-between w-full mb-4 text-lg">
 
-    <button id="aiBtn">
-        AI Commentary
-    </button>
-
-    <div id="commentary">
-
+        </div>
     </div>
 
     <script src="script.js"></script>
-
 </body>
+
 </html>
