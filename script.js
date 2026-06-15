@@ -137,20 +137,20 @@ function draw() {
     });
 }
 
-// Keyboard controls 
+// Keyboard controls 180deg directional fix
 document.addEventListener('keydown', (e) => {
     if (!isGameRunning) return;
     
-    if (e.key === 'ArrowUp') {
+    if ((e.key === 'ArrowUp'||e.key === 'w')&& dy !== 1) {
         dx = 0;
         dy = -1;
-    } else if (e.key === 'ArrowDown') {
+    } else if ((e.key === 'ArrowDown'||e.key === 's')&& dy !== -1) {
         dx = 0;
         dy = 1;
-    } else if (e.key === 'ArrowLeft') {
+    } else if ((e.key === 'ArrowLeft'||e.key === 'a')&& dx !== 1) {
         dx = -1;
         dy = 0;
-    } else if (e.key === 'ArrowRight') {
+    } else if ((e.key === 'ArrowRight'||e.key === 'd')&& dx !== -1) {
         dx = 1;
         dy = 0;
     }
