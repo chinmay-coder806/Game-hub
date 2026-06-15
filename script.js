@@ -1,3 +1,7 @@
+const aiBtn = document.getElementById('aiBtn');
+const commentaryBox = document.getElementById('commentary');
+const GEMINI_API_KEY = 'Your_API_key'; 
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('scoreValue');
@@ -155,6 +159,55 @@ document.addEventListener('keydown', (e) => {
         dy = 0;
     }
 });
+
+// AI Commentary Function
+async function getAICommentary() {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_API_KEY_HERE') {
+        commentaryBox.textContent = "Please add your Gemini API key to script.js!";
+        return;
+    }
+
+    // 1. Show loading state & prevent spam clicking
+    commentaryBox.textContent = "🤖 AI is thinking...";
+    aiBtn.disabled = true; 
+    aiBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+    // 2. Build a context-aware prompt based on the live game state
+    let gameState = isGameRunning 
+        ? `The game is currently running. The player is alive, has a score of ${score}, and the snake is ${snake.length} blocks long.` 
+        : `The game is over. The player's final score was ${score}.`;
+
+    const promptText = `You are a witty, slightly sarcastic, but ultimately encouraging AI game commentator watching a human play Snake. 
+    Here is the current game state: ${gameState}
+    Give a short, 1 to 2 sentence commentary on their performance. Do not use hashtags.`;
+
+    // 3. Call the Gemini API
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: promptText }] }]
+            })
+        });
+
+        if (!response.ok) throw new Error("API request failed");
+
+        const data = await response.json();
+        const aiText = data.candidates[0].content.parts[0].text;
+
+        // 4. Display the AI's comment
+        commentaryBox.textContent = `🤖: "${aiText}"`;
+    } catch (error) {
+        console.error("Gemini API Error:", error);
+        commentaryBox.textContent = "🤖: *Static noises* I lost my connection to the arena!";
+    } finally {
+        // Re-enable the button
+        aiBtn.disabled = false;
+        aiBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+    }
+}
+aiBtn.addEventListener('click', getAICommentary);
 
 // Button listener
 startBtn.addEventListener('click', initGame);
