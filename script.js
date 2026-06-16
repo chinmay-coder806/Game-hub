@@ -33,9 +33,11 @@ let dy = 0;
 let foodX;
 let foodY;
 let score = 0;
-let highScore = 0;
+let highScore = Number(localStorage.getItem("highScore") || 0);
+highScoreElement.textContent = highScore;
 let gameLoop;
 let isGameRunning = false;
+let isPaused = false;
 
 // Initialize the game
 function initGame() {
@@ -50,6 +52,7 @@ commentaryBox.textContent = "";
     scoreElement.textContent = score;
     spawnFood();
     isGameRunning = true;
+    isPaused = false;
     startBtn.textContent = 'Restart Game';
     getAICommentary("start");
 
@@ -59,6 +62,8 @@ commentaryBox.textContent = "";
 
 // Main game loop
 function update() {
+
+    if (isPaused) return;
     moveSnake();
 
     if (checkCollision()) {
@@ -133,22 +138,24 @@ function spawnFood() {
 // End the game
 function gameOver() {
     clearInterval(gameLoop);
-    // clearInterval(commentaryInterval);
     isGameRunning = false;
     startBtn.textContent = 'Start Game';
 
     if (score > highScore) {
 
-        highScore = score;
-        highScoreElement.textContent = highScore;
+    highScore = score;
 
-        getAICommentary("highScore");
+    localStorage.setItem("highScore", highScore);
 
-    } else {
+    highScoreElement.textContent = highScore;
 
-        getAICommentary("gameOver");
+    getAICommentary("highScore");
 
-    }
+} else {
+
+    getAICommentary("gameOver");
+
+}
     // Draw Game Over text
     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -178,6 +185,16 @@ function draw() {
 // Keyboard controls 180deg directional fix
 document.addEventListener('keydown', (e) => {
     if (!isGameRunning) return;
+        if (e.key === " ") {
+            e.preventDefault();
+        isPaused = !isPaused;
+
+        commentaryBox.textContent = isPaused
+            ? "⏸ Game Paused"
+            : "▶ Game Resumed";
+
+        return;
+    }
 
     if ((e.key === 'ArrowUp' || e.key === 'w') && dy !== 1) {
         dx = 0;
