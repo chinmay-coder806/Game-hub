@@ -1,4 +1,4 @@
-// const aiBtn = document.getElementById('aiBtn');
+
 let localCommentTimer = null;
 let isGeneratingComment = false;
 const commentaryBox = document.getElementById('commentary');
@@ -42,7 +42,7 @@ let isPaused = false;
 // Initialize the game
 function initGame() {
     clearTimeout(localCommentTimer);
-commentaryBox.textContent = "";
+    commentaryBox.textContent = "";
     snake = [
         { x: 10, y: 10 } // Starting position
     ];
@@ -143,19 +143,19 @@ function gameOver() {
 
     if (score > highScore) {
 
-    highScore = score;
+        highScore = score;
 
-    localStorage.setItem("highScore", highScore);
+        localStorage.setItem("highScore", highScore);
 
-    highScoreElement.textContent = highScore;
+        highScoreElement.textContent = highScore;
 
-    getAICommentary("highScore");
+        getAICommentary("highScore");
 
-} else {
+    } else {
 
-    getAICommentary("gameOver");
+        getAICommentary("gameOver");
 
-}
+    }
     // Draw Game Over text
     ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -185,8 +185,8 @@ function draw() {
 // Keyboard controls 180deg directional fix
 document.addEventListener('keydown', (e) => {
     if (!isGameRunning) return;
-        if (e.key === " ") {
-            e.preventDefault();
+    if (e.key === " ") {
+        e.preventDefault();
         isPaused = !isPaused;
 
         commentaryBox.textContent = isPaused
@@ -221,57 +221,46 @@ async function getAICommentary(event = "playing") {
 
     let prompt = "";
 
-    
+
     switch (event) {
 
 
         case "playing":
             prompt = `
-You are a live esports commentator for a Snake game.
-
-Current Score: ${score}
-High Score: ${highScore}
-Snake Length: ${snake.length}
-
-Give one short, witty commentary.
-Keep it under 12 words.
-Mix praise, sarcasm, and playful roasts.
-Never mention you're an AI.
-Never introduce yourself.
-`;
-            break;
+                You are a live esports commentator for a Snake game.
+                Current Score: ${score}
+                High Score: ${highScore}
+                Snake Length: ${snake.length}
+                Give one short, witty commentary.
+                Keep it under 12 words.
+                Mix praise, sarcasm, and playful roasts.
+                Never mention you're an AI.
+                Never introduce yourself. `;
+                break;
 
         case "gameOver":
 
             prompt = `
-The Snake game has just ended.
-
-Final Score: ${score}
-
-React like a live esports commentator.
-One funny sentence.
-Under 12 words.
-`;
+                The Snake game has just ended.
+                Final Score: ${score}
+                React like a live esports commentator.
+                One funny sentence.
+                Under 12 words.`;
             break;
 
         case "highScore":
             prompt = `
-The player just achieved a new high score of ${score}.
-
-React like an excited esports commentator.
-One sentence.
-Under 12 words.
-`;
+                The player just achieved a new high score of ${score}.
+                React like an excited esports commentator.
+                One sentence.
+                Under 12 words.`;
             break;
 
         case "start":
             prompt = `
-The Snake game is about to begin.
-
-Write one exciting opening line.
-
-Maximum 10 words.
-`;
+                The Snake game is about to begin.
+                Write one exciting opening line.
+                Maximum 10 words.`;
             break;
     }
 
@@ -321,8 +310,8 @@ Maximum 10 words.
 
 
     } catch (err) {
-    console.error(err);
-    showLocalComment();
+        console.error(err);
+        showLocalComment();
 
     } finally {
         isGeneratingComment = false;
